@@ -1,0 +1,6 @@
+[11:15:46 AM] SERVICE
+  Sending request: [object Object]
+[11:15:46 AM] SERVICE
+  Got 'error': [object Object]
+[11:15:46 AM] SERVICE
+  Received error event '{"Kind":"error","Data":"No help text available for symbol 'Exercise'"}': [object Object]
