@@ -109,28 +109,19 @@ main(int argc, char **argv)
 
 #ifdef CHANGED
 #ifdef HW1_ELEVATOR
-    Elevator(30);
-    ArrivingGoingFromTo(1, 4);
-    ArrivingGoingFromTo(1, 4);
-    ArrivingGoingFromTo(1, 3);
-    ArrivingGoingFromTo(1, 6);
-    ArrivingGoingFromTo(2, 3);
-    ArrivingGoingFromTo(1, 9);
-    ArrivingGoingFromTo(3, 4);
-    ArrivingGoingFromTo(4, 1);
-    ArrivingGoingFromTo(10, 5);
-    ArrivingGoingFromTo(11, 20);
-    ArrivingGoingFromTo(4, 7);
-    ArrivingGoingFromTo(23, 2);
-    ArrivingGoingFromTo(13, 14);
-    ArrivingGoingFromTo(10, 8);
-    ArrivingGoingFromTo(10, 5);
-    ArrivingGoingFromTo(11, 20);
-    ArrivingGoingFromTo(4, 7);
+    Elevator(50);
+    ArrivingGoingFromTo(1, 15);
+    ArrivingGoingFromTo(1, 11);
+    ArrivingGoingFromTo(1, 2);
+    ArrivingGoingFromTo(1, 2);
+    ArrivingGoingFromTo(2, 18);
+    ArrivingGoingFromTo(30, 50);
+    ArrivingGoingFromTo(45, 20);
+    ArrivingGoingFromTo(42, 7);
     ArrivingGoingFromTo(10, 17);
-    ArrivingGoingFromTo(4, 12);
-    ArrivingGoingFromTo(4, 12);
-    ArrivingGoingFromTo(30, 1);
+    ArrivingGoingFromTo(47, 12);
+    ArrivingGoingFromTo(43, 12);
+    ArrivingGoingFromTo(50, 1);
 #else
     ThreadTest(4);
 #endif

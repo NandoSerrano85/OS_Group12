@@ -18,7 +18,7 @@ int testnum = 1;
 int threadsDone;
 //----------------------------------------------------------------------
 // SimpleThread
-// 	Loop 5 times, yielding the CPU to another ready thread 
+// 	Loop 5 times, yielding the CPU to another ready thread
 //	each iteration.
 //
 //	"which" is simply a number identifying the thread, for debugging
@@ -27,85 +27,85 @@ int threadsDone;
 
 //****Probelm 1: Semaphores****
 #if defined(CHANGED) && defined(HW1_SEMAPHORES)
-int SharedVariable; 
+int SharedVariable;
 Semaphore *s;
-void SimpleThread(int which) 
-{ 
+void SimpleThread(int which)
+{
     if(s == NULL)
     {
 	DEBUG('t', "USING SEMAPHORES\n");
 	s = new Semaphore("shared semaphore", 1);
     }
-    int num, val; 
+    int num, val;
 
-    for(num = 0; num < 5; num++) 
-    { 
+    for(num = 0; num < 5; num++)
+    {
 	s->P();
-	
-	val = SharedVariable; 
-	printf("*** thread %d sees value %d\n", which, val); 
-	currentThread->Yield(); 
-	SharedVariable = val+1; 
-	
+
+	val = SharedVariable;
+	printf("*** thread %d sees value %d\n", which, val);
+	currentThread->Yield();
+	SharedVariable = val+1;
+
 	s->V();
-	
-	currentThread->Yield(); 
-    } 
+
+	currentThread->Yield();
+    }
 
     //We use threadsDone as a "barrier" to stop threads that finish
     // first from printing the final value.
     threadsDone--;
     while(threadsDone != 0)
-	currentThread->Yield(); 
-    val = SharedVariable; 
-    
+	currentThread->Yield();
+    val = SharedVariable;
+
     printf("Thread %d sees final value %d\n", which, val);
 }
 
-//****Probelm 2: Locks**** 
+//****Probelm 2: Locks****
 #elif defined(CHANGED) &&  defined(HW1_LOCKS)
-int SharedVariable; 
+int SharedVariable;
 Lock *testLock;
-void SimpleThread(int which) 
-{ 
+void SimpleThread(int which)
+{
     if(testLock == NULL)
     {
 	DEBUG('t', "USING LOCKS\n");
 	testLock = new  Lock("test");
     }
-    int num, val; 
-    
-    for(num = 0; num < 5; num++) 
-    { 
+    int num, val;
+
+    for(num = 0; num < 5; num++)
+    {
 	testLock->Acquire();
-	
-	val = SharedVariable; 
-	printf("*** thread %d sees value %d\n", which, val); 
-	currentThread->Yield(); 
-	SharedVariable = val+1; 
-	
+
+	val = SharedVariable;
+	printf("*** thread %d sees value %d\n", which, val);
+	currentThread->Yield();
+	SharedVariable = val+1;
+
 	testLock->Release();
-	
-	currentThread->Yield(); 
-    } 
-    
+
+	currentThread->Yield();
+    }
+
     //We use threadsDone as a "barrier" to stop threads that finish
     // first from printing the final value.
     threadsDone--;
     while(threadsDone != 0)
-	currentThread->Yield(); 
-    val = SharedVariable; 
-    
+	currentThread->Yield();
+    val = SharedVariable;
+
     printf("Thread %d sees final value %d\n", which, val);
 }
-
+//****Probelm 4: Elevator****
 #elif defined(CHANGED) && defined(HW1_ELEVATOR)
 void
 SimpleThread(int which)
 {
     int num;
-    
-    for (num = 0; num < 5; num++) 
+
+    for (num = 0; num < 5; num++)
     {
 	printf("*** thread %d looped %d times\n", which, num);
         currentThread->Yield();
@@ -175,7 +175,7 @@ void run_elevator(int numFloors)
 	eleLock->Release();
 
         //give people a chance to do stuff(when random seed is NOT used)
-	currentThread->Yield(); 
+	currentThread->Yield();
 
 	if(currFloor == numFloors - 1)
 	    direction = DOWN;
@@ -196,12 +196,12 @@ void run_elevator(int numFloors)
 
 	eleLock->Release();
 
-	//Let people waiting on current floor get on elevator	
+	//Let people waiting on current floor get on elevator
 	eleLock->Acquire();
 
 	eleCond->Broadcast(eleLock);
 	while(floors[currFloor].gettingOn > 0 && occupied < ELEVATOR_CAPACITY)
-	    eleCond->Wait(eleLock);    
+	    eleCond->Wait(eleLock);
 
 	eleLock->Release();
     }
@@ -225,7 +225,7 @@ void run_person(int p)
     eleLock->Acquire();
 
     floors[person->atFloor-1].gettingOn++;
-    printf("Person %d wants to go to floor %d from floor %d.\n", 
+    printf("Person %d wants to go to floor %d from floor %d.\n",
 	   person->id, person->toFloor, person->atFloor);
 
     eleLock->Release();
@@ -237,7 +237,7 @@ void run_person(int p)
 	eleCond->Wait(eleLock);
 
     eleLock->Release();
-    
+
     //Get on elevator and wait to arrive at desired floor
     eleLock->Acquire();
 
@@ -253,10 +253,10 @@ void run_person(int p)
 
     while(currFloor != person->toFloor-1)
 	eleCond->Wait(eleLock);
-   
+
     //Get off on desired Floor
     occupied--;
-    printf("Person %d got out of the elevator at floor %d.\n", person->id, currFloor+1); 
+    printf("Person %d got out of the elevator at floor %d.\n", person->id, currFloor+1);
     floors[person->toFloor-1].gettingOff--;
     eleCond->Broadcast(eleLock);
 
@@ -278,7 +278,7 @@ void
 SimpleThread(int which)
 {
     int num;
-    
+
     for (num = 0; num < 5; num++) {
 	printf("*** thread %d looped %d times\n", which, num);
         currentThread->Yield();
@@ -286,7 +286,7 @@ SimpleThread(int which)
 }
 #endif
 #if defined(CHANGED) && defined(THREADS)
-void 
+void
 ThreadTest(int n)
 {
     int i;
@@ -303,7 +303,7 @@ ThreadTest(int n)
 
 //----------------------------------------------------------------------
 // ThreadTest1
-// 	Set up a ping-pong between two threads, by forking a thread 
+// 	Set up a ping-pong between two threads, by forking a thread
 //	to call SimpleThread, and then calling SimpleThread ourselves.
 //----------------------------------------------------------------------
 void
