@@ -4,3 +4,33 @@
   Got 'error': [object Object]
 [11:15:46 AM] SERVICE
   Received error event '{"Kind":"error","Data":"No help text available for symbol 'Exercise'"}': [object Object]
+[7:58:58 PM] SERVICE
+  Sending request: [object Object]
+[7:58:58 PM] SERVICE
+  Got 'error': [object Object]
+[7:58:58 PM] SERVICE
+  Received error event '{"Kind":"error","Data":"No help text available for symbol 'numbers'"}': [object Object]
+[7:58:58 PM] SERVICE
+  Sending request: [object Object]
+[7:58:58 PM] SERVICE
+  Got 'error': [object Object]
+[7:58:58 PM] SERVICE
+  Received error event '{"Kind":"error","Data":"No help text available for symbol 'num_people'"}': [object Object]
+[7:59:35 PM] SERVICE
+  Sending request: [object Object]
+[7:59:35 PM] SERVICE
+  Got 'error': [object Object]
+[7:59:35 PM] SERVICE
+  Received error event '{"Kind":"error","Data":"No help text available for symbol 'numbers'"}': [object Object]
+[7:59:35 PM] SERVICE
+  Sending request: [object Object]
+[7:59:35 PM] SERVICE
+  Got 'error': [object Object]
+[7:59:35 PM] SERVICE
+  Received error event '{"Kind":"error","Data":"No help text available for symbol 'numFloors'"}': [object Object]
+[7:59:36 PM] SERVICE
+  Sending request: [object Object]
+[7:59:36 PM] SERVICE
+  Got 'error': [object Object]
+[7:59:36 PM] SERVICE
+  Received error event '{"Kind":"error","Data":"No help text available for symbol 'num_people'"}': [object Object]
