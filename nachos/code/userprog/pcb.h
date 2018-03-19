@@ -10,7 +10,6 @@
 class Thread;
 class Lock;
 class Condition;
-class UserOpenFile;
 class PCB
 {
  public:
@@ -27,20 +26,16 @@ class PCB
     void OrphanChildren();
     int GetExitStatus(){return exitStatus;}
     void SetExitStatus(int val){exitStatus = val;}
-    int GetUID();
-    bool ClearUID(int which);
-    int GetFreeUids();
+
 
     List* children;
     Lock* pcbLock;
     Condition* pcbCond;
-    List* files;
  private:
     int pid;
     int exitStatus;
     Thread* thrd;
     Thread* parent;
-    BitMap* uids;
 
 };
 #endif

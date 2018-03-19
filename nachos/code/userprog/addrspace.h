@@ -35,13 +35,10 @@ class AddrSpace {
     int Translate(int i);               // before jumping to user code
 
     void SaveState();			// Save/restore address space-specific
-    void RestoreState(); // info on a context switch 
+    void RestoreState(); // info on a context switch
     AddrSpace* Fork();                  // Create duplicate address space
     void FreePages();                   //Free allocated physical pages
-    int ReadFile(int virtAddr,
-		 OpenFile* file,
-		 int size,
-		 int fileAddr);
+    int ReadFile(int virtAddr, OpenFile* file, int size, int fileAddr);
     PCB* pcb;
     int codeSize;
     int initDataSize;
