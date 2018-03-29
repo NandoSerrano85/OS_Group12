@@ -65,7 +65,7 @@ extern void ThreadTest(int n);
 extern void Elevator(int numFloors);
 extern void ArrivingGoingFromTo(int atFloor, int toFloor);
 #endif
-extern void ThreadTest(int n), Copy(char *unixFile, char *nachosFile);
+extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);

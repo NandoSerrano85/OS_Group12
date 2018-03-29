@@ -1,4 +1,4 @@
-#define MAX_FILES 25
+#define MAX_FILES 50
 
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
