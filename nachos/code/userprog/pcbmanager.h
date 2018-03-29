@@ -5,6 +5,8 @@
 #include "bitmap.h"
 #include "list.h"
 
+#include "useropenfile.h" //
+
 #define MAX_PID 512
 
 class PCBManager

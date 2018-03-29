@@ -7,7 +7,7 @@ PCBManager*
 PCBManager::GetInstance()
 {
     if(!manager)
-    	manager = new PCBManager();
+	manager = new PCBManager();
     return manager;
 }
 
@@ -36,7 +36,7 @@ PCBManager::GetPID()
     pidLock->Acquire();
 
     int pid = pids->Find();
-
+    
     if(pid >= 0)
 	usedPids++;
 
@@ -49,7 +49,7 @@ bool
 PCBManager::ClearPID(int which)
 {
     if(usedPids <= 0)
-    	return false;
+	return false;
 
     pidLock->Acquire();
     pids->Clear(which);
@@ -71,7 +71,7 @@ PCBManager::GetFreePids()
     return count;
 }
 
-void*
+void* 
 PCBManager::RemovePCB(int pkey)
 {
     return pcbs->Remove(pkey);
