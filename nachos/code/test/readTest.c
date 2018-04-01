@@ -9,7 +9,7 @@ void fastRead(){
 	totalRead = 0;
 	while ( (count = Read(buf, 2, src)) > 0 ) 
 	{
-	    Write("##########fastRead: ",20, ConsoleOutput);
+	    Write("fastRead: ",20, ConsoleOutput);
 	    Write(buf, count, ConsoleOutput);
 		totalRead += count;
 		Yield();
@@ -22,13 +22,13 @@ void fastRead(){
 
 int main()
 {
-        SpaceId src;
-        int count;
-        char buf[10];
-        int totalRead;
+    SpaceId src;
+    int count;
+    char buf[10];
+    int totalRead;
 	int pid;
 
-	pid = Fork(fastRead);
+	Fork(fastRead);
 	Yield();
 
         src = Open("in.tmp");

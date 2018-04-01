@@ -35,33 +35,54 @@ CPP = gcc -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt shell matmult sort
+all: halt shell matmult sort fork simplefork exec filetest readTest
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
 	$(AS) $(ASFLAGS) -o start.o strt.s
 	rm strt.s
-
 halt.o: halt.c
 	$(CC) $(CFLAGS) -c halt.c
 halt: halt.o start.o
 	$(LD) $(LDFLAGS) start.o halt.o -o halt.coff
 	../bin/coff2noff halt.coff halt
-
 shell.o: shell.c
 	$(CC) $(CFLAGS) -c shell.c
 shell: shell.o start.o
 	$(LD) $(LDFLAGS) start.o shell.o -o shell.coff
 	../bin/coff2noff shell.coff shell
-
 sort.o: sort.c
 	$(CC) $(CFLAGS) -c sort.c
 sort: sort.o start.o
 	$(LD) $(LDFLAGS) start.o sort.o -o sort.coff
 	../bin/coff2noff sort.coff sort
-
 matmult.o: matmult.c
 	$(CC) $(CFLAGS) -c matmult.c
 matmult: matmult.o start.o
 	$(LD) $(LDFLAGS) start.o matmult.o -o matmult.coff
 	../bin/coff2noff matmult.coff matmult
+fork.o: fork.c
+	$(CC) $(CFLAGS) -c fork.c
+fork: fork.o start.o
+	$(LD) $(LDFLAGS) start.o fork.o -o fork.coff
+	../bin/coff2noff fork.coff fork
+simplefork.o: simplefork.c
+	$(CC) $(CFLAGS) -c simplefork.c
+simplefork: simplefork.o start.o
+	$(LD) $(LDFLAGS) start.o simplefork.o -o simplefork.coff
+	../bin/coff2noff simplefork.coff simplefork
+exec.o: exec.c
+	$(CC) $(CFLAGS) -c exec.c
+exec: exec.o start.o
+	$(LD) $(LDFLAGS) start.o exec.o -o exec.coff
+	../bin/coff2noff exec.coff exec
+filetest.o: filetest.c
+	$(CC) $(CFLAGS) -c filetest.c
+filetest: filetest.o start.o
+	$(LD) $(LDFLAGS) start.o filetest.o -o filetest.coff
+	../bin/coff2noff filetest.coff filetest
+readTest.o: readTest.c
+	$(CC) $(CFLAGS) -c readTest.c
+readTest: readTest.o start.o
+	$(LD) $(LDFLAGS) start.o readTest.o -o readTest.coff
+	../bin/coff2noff readTest.coff readTest
