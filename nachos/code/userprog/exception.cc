@@ -151,7 +151,111 @@ ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
 
-    if(which == SyscallException)
+// PageFaultException    
+    if(which == PageFaultException)
+    {
+        char swapBuffer[PageSize];
+        MemoryManager *manager  = MemoryManager::GetInstance();
+        int badVAddr = machine->ReadRegister(BadVAddrReg);
+        DEBUG('p', "Page Fault occurred at VA=0x%x\n", badVAddr);
+        int frameId = manager->GetPage();
+        int vpn = badVAddr/PageSize;
+        OpenFile* swap = fileSystem->Open(currentThread->space->swap);
+
+        if(frameId >= 0)
+        {
+            DEBUG('p', "Free frame %d found\n", frameId);
+
+            currentThread->space->pageTable[vpn].valid = true;
+            currentThread->space->pageTable[vpn].physicalPage = frameId;
+            currentThread->space->pageTable[vpn].persisted = false;
+            int start =currentThread->space->TranslateDiskLocation(badVAddr);
+            DEBUG('p', "Starting address to read = 0x%x\n", start);
+            manager->entries[frameId].ioLocked = true;
+            int read = swap->ReadAt(swapBuffer, PageSize, start); //read swap file
+
+            DEBUG('p', "Read %d bytes from %s pagesize(%d)\n", read, currentThread->space->swap,PageSize);
+
+
+            bzero(machine->mainMemory + currentThread->space->pageTable[vpn].physicalPage * PageSize, PageSize);
+            manager->entries[frameId].vPageNumber = currentThread->space->pageTable[vpn].virtualPage;
+            manager->entries[frameId].space = currentThread->space;
+
+            int tocopy = min(read,PageSize);
+            int phyAddr = frameId * PageSize;
+            DEBUG('p', "Writing data to Memory at 0x%x\n", phyAddr);
+            bcopy(swapBuffer, &machine->mainMemory[phyAddr], tocopy);
+            manager->entries[frameId].ioLocked = false;
+            printf("L [%d]: [%d] -> [%d]\n", currentThread->space->pcb->GetPID(), manager->entries[frameId].vPageNumber, frameId);
+
+        }
+        else //no free frames
+        {
+            DEBUG('p', "Looking to replace Frame at index %d\n", manager->replaceIndex);
+            while(manager->entries[manager->replaceIndex].ioLocked)
+            {
+            manager->replaceIndex++;
+            manager->replaceIndex  = manager->replaceIndex % manager->totalPages;
+            }
+            CoreMapEntry *entry = &manager->entries[manager->replaceIndex];
+            DEBUG('p', "Evicting from pid[%d], page %d!!\n", entry->space->pcb->GetPID(), entry->vPageNumber);
+
+            //update victim page table
+            entry->space->pageTable[entry->vPageNumber].persisted = true;
+            entry->space->pageTable[entry->vPageNumber].valid = false;
+
+            currentThread->space->pageTable[vpn].valid = true;
+            currentThread->space->pageTable[vpn].physicalPage = entry->space->pageTable[entry->vPageNumber].physicalPage;
+
+
+            if(entry->space->pageTable[entry->vPageNumber].dirty)
+            {
+                OpenFile *victimSwap;
+                
+                if(strcmp(entry->space->swap, currentThread->space->swap) == 0)
+                    victimSwap = swap;
+                else
+                    victimSwap = fileSystem->Open(entry->space->swap);
+
+                DEBUG('p', "Page %d is dirty. Writing to %s...\n", entry->vPageNumber, entry->space->swap);
+                int start = entry->space->pageTable[entry->vPageNumber].virtualPage * PageSize;
+                entry->ioLocked = true;
+                bcopy(&machine->mainMemory[entry->space->pageTable[entry->vPageNumber].physicalPage*PageSize], swapBuffer, PageSize);
+
+                int write = swap->WriteAt(swapBuffer, PageSize, start);
+                entry->ioLocked = false;
+                printf("S [%d]: [%d]\n", entry->space->pcb->GetPID(), manager->replaceIndex);
+
+            }
+            else
+                printf("E [%d]: [%d]\n", entry->space->pcb->GetPID(), manager->replaceIndex);
+
+                int start = currentThread->space->TranslateDiskLocation(badVAddr);
+                DEBUG('p', "Start point for reading is 0x%x\n", start);
+                entry->ioLocked = true;
+                int read = swap->ReadAt(swapBuffer, PageSize, start); //read swap file
+                DEBUG('p', "Read %d bytes from %s\n", read, currentThread->space->swap);
+
+                bzero(machine->mainMemory + currentThread->space->pageTable[vpn].physicalPage * PageSize, PageSize);
+
+                int phyAddr = currentThread->space->pageTable[vpn].physicalPage * PageSize;
+                int tocopy = min(read,PageSize);
+                bcopy(swapBuffer, &machine->mainMemory[phyAddr], tocopy);
+                entry->ioLocked = false;
+
+                printf("L [%d]: [%d] -> [%d]\n", currentThread->space->pcb->GetPID(), manager->entries[frameId].vPageNumber, manager->replaceIndex);
+
+                    //update coremap entry to refer to new page
+                entry->vPageNumber = vpn;
+                entry->space = currentThread->space;
+                entry->space->pageTable[manager->replaceIndex].persisted = false;
+                manager->replaceIndex++;
+                manager->replaceIndex  = manager->replaceIndex % manager->totalPages;
+        }
+    }    
+//
+    
+    else if(which == SyscallException)
     {
 	switch(type)
 	{
@@ -454,49 +558,49 @@ ExceptionHandler(ExceptionType which)
 	    }
 	    case SC_Fork:
 	    {
-		PCBManager* manager = PCBManager::GetInstance();
-		DEBUG('a', "Fork, initiated by user program.\n");
+            PCBManager* manager = PCBManager::GetInstance();
+            DEBUG('a', "Fork, initiated by user program.\n");
 
-		printf("System Call: [%d] invoked Fork\n", currentThread->space->pcb->GetPID());
+            printf("System Call: [%d] invoked Fork\n", currentThread->space->pcb->GetPID());
 
-		currentThread->space->SaveState(); //save old registers
+            currentThread->space->SaveState(); //save old registers
 
-		AddrSpace* fSpace = currentThread->space->Fork(); //make duplicate address space
-		if(fSpace == NULL){
-			printf("Unable to create Address Space\n");
-			machine->WriteRegister(2, -1);
-			break;
-		}
+            int pid = manager->GetPID(); //find next available pid
+            AddrSpace* fSpace = currentThread->space->Fork(pid); //make duplicate address space
+            if(fSpace == NULL){
+                printf("Unable to create Address Space\n");
+                machine->WriteRegister(2, -1);
+                break;
+            }
 
-		Thread* fThread = new Thread("forked thread");
+            Thread* fThread = new Thread("forked thread");
 
-		int pc =  machine->ReadRegister(4);
-		//copy old register values into new thread;
-		for(int i = 0; i < NumTotalRegs; i++)
-		{
-		    fThread->SetUserRegister(i, currentThread->GetUserRegister(i));
-		}
-		fThread->SetUserRegister(PCReg, pc); //set PC to whatever is in r4
-		fThread->SetUserRegister(NextPCReg, pc+4);
+            int pc =  machine->ReadRegister(4);
+            //copy old register values into new thread;
+            for(int i = 0; i < NumTotalRegs; i++)
+            {
+                fThread->SetUserRegister(i, currentThread->GetUserRegister(i));
+            }
+            fThread->SetUserRegister(PCReg, pc); //set PC to whatever is in r4
+            fThread->SetUserRegister(NextPCReg, pc+4);
 
-		int pid = manager->GetPID(); //find next available pid
-		ASSERT(pid >= 0);
-		PCB* pcb = new PCB(fThread, pid, currentThread);
+            ASSERT(pid >= 0);
+            PCB* pcb = new PCB(fThread, pid, currentThread);
 
-		//add new thread pcb to children of current thread
-		currentThread->space->pcb->children->SortedInsert((void*)pcb, pcb->GetPID());
+            //add new thread pcb to children of current thread
+            currentThread->space->pcb->children->SortedInsert((void*)pcb, pcb->GetPID());
 
-		fSpace->pcb = pcb;
-		manager->pcbs->SortedInsert((void*)pcb, pcb->GetPID()); //insert into list of pcbs, sorted by pid
+            fSpace->pcb = pcb;
+            manager->pcbs->SortedInsert((void*)pcb, pcb->GetPID()); //insert into list of pcbs, sorted by pid
 
-		printf("Process [%d] Fork: start at address [0x%x] with [%d] pages memory\n",
-			       currentThread->space->pcb->GetPID(), pc, fSpace->GetNumPages());
-		fThread->space = fSpace;
+            printf("Process [%d] Fork: start at address [0x%x] with [%d] pages memory\n",
+                       currentThread->space->pcb->GetPID(), pc, fSpace->GetNumPages());
+            fThread->space = fSpace;
 
-		fThread->Fork(DummyFunction, pc);
+            fThread->Fork(DummyFunction, pc);
 
-		machine->WriteRegister(2, pid);
-		break;
+            machine->WriteRegister(2, pid);
+            break;
 	    }
 	    case SC_Kill:
 	    {

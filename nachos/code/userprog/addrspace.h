@@ -33,12 +33,29 @@ class AddrSpace {
     int GetNumPages() {return numPages;};
     void InitRegisters();		// Initialize user-level CPU registers,
     int Translate(int i);               // before jumping to user code
+    
+    int TranslateDiskLocation(int i);               // before jumping to user code
 
     void SaveState();			// Save/restore address space-specific
     void RestoreState(); // info on a context switch
-    AddrSpace* Fork();                  // Create duplicate address space
+    AddrSpace* Fork(int pid);                  // Create duplicate address space
     void FreePages();                   //Free allocated physical pages
     int ReadFile(int virtAddr, OpenFile* file, int size, int fileAddr);
+    
+    // 
+    
+    int ReadFileIntoBuffer(int virtAddr, 
+			   OpenFile* file,
+			   int size,
+			   int fileAddr, char *into);
+               
+    char swap[10];                
+    int nextVPage;
+    
+    TranslationEntry *pageTable;
+    
+    //
+    
     PCB* pcb;
     int codeSize;
     int initDataSize;
@@ -46,7 +63,7 @@ class AddrSpace {
 private:
     AddrSpace();   //empty constructor for Fork Operation
     void init(OpenFile* executable, Thread* parent, Thread* selfThread, bool replace); //moved noff data reading and page table building here
-    TranslationEntry *pageTable;
+    
     unsigned int numPages;
     MemoryManager* manager;
 };
