@@ -1,0 +1,254 @@
+Group 12:
+    Edward Terry
+    Pablo Mueller 
+    Fernando Serrano
+
+Project 4
+----------
+
+In order to effectively run the NACHOS with the changes made, the Makefile in the
+userprog directory must have -DCHANGED defined. 
+
+Each test can be called from the userprog directory by executing NACHOS as follows
+
+    ./nachos -x ../test/TESTNAME
+
+where TESTNAME is the name of the test file to be run. 
+
+In the case of this project, we use three test files, halt, sort, and matmult. 
+Upon running the 'matmult' test file, the output
+is as follows: 
+
+    eterr008@nachos:~/Desktop/OS_Group12/nachos/code/userprog 112% ./nachos -x ../test/matmult
+    Loaded Program: [1008] code |  [0] data | [4800] bss
+    L [1]: [0] -> [0]
+    L [1]: [1] -> [1]
+    L [1]: [53] -> [2]
+    L [1]: [2] -> [3]
+    L [1]: [7] -> [4]
+    L [1]: [3] -> [5]
+    L [1]: [20] -> [6]
+    L [1]: [32] -> [7]
+    L [1]: [8] -> [8]
+    L [1]: [33] -> [9]
+    L [1]: [4] -> [10]
+    L [1]: [21] -> [11]
+    L [1]: [9] -> [12]
+    L [1]: [34] -> [13]
+    L [1]: [22] -> [14]
+    L [1]: [10] -> [15]
+    L [1]: [35] -> [16]
+    L [1]: [23] -> [17]
+    L [1]: [11] -> [18]
+    L [1]: [36] -> [19]
+    L [1]: [24] -> [20]
+    L [1]: [12] -> [21]
+    L [1]: [37] -> [22]
+    L [1]: [25] -> [23]
+    L [1]: [13] -> [24]
+    L [1]: [38] -> [25]
+    L [1]: [26] -> [26]
+    L [1]: [14] -> [27]
+    L [1]: [39] -> [28]
+    L [1]: [27] -> [29]
+    L [1]: [15] -> [30]
+    L [1]: [40] -> [31]
+    E [1]: [0]
+    L [1]: [0] -> [0]
+    E [1]: [1]
+    L [1]: [0] -> [1]
+    S [1]: [2]
+    L [1]: [0] -> [2]
+    E [1]: [3]
+    L [1]: [0] -> [3]
+    S [1]: [4]
+    L [1]: [0] -> [4]
+    E [1]: [5]
+    L [1]: [0] -> [5]
+    S [1]: [6]
+    L [1]: [0] -> [6]
+    S [1]: [7]
+    L [1]: [0] -> [7]
+    S [1]: [8]
+    L [1]: [0] -> [8]
+    S [1]: [9]
+    L [1]: [0] -> [9]
+    E [1]: [10]
+    L [1]: [0] -> [10]
+    S [1]: [11]
+    L [1]: [0] -> [11]
+    S [1]: [12]
+    L [1]: [0] -> [12]
+    S [1]: [13]
+    L [1]: [0] -> [13]
+    S [1]: [14]
+    L [1]: [0] -> [14]
+    S [1]: [15]
+    L [1]: [0] -> [15]
+    S [1]: [16]
+    L [1]: [0] -> [16]
+    S [1]: [17]
+    L [1]: [0] -> [17]
+    S [1]: [18]
+    L [1]: [0] -> [18]
+    S [1]: [19]
+    L [1]: [0] -> [19]
+    S [1]: [20]
+    L [1]: [0] -> [20]
+    S [1]: [21]
+    L [1]: [0] -> [21]
+    S [1]: [22]
+    L [1]: [0] -> [22]
+    S [1]: [23]
+    L [1]: [0] -> [23]
+    S [1]: [24]
+    L [1]: [0] -> [24]
+    S [1]: [25]
+    L [1]: [0] -> [25]
+    S [1]: [26]
+    L [1]: [0] -> [26]
+    S [1]: [27]
+    L [1]: [0] -> [27]
+    S [1]: [28]
+    L [1]: [0] -> [28]
+    S [1]: [29]
+    L [1]: [0] -> [29]
+    S [1]: [30]
+    L [1]: [0] -> [30]
+    S [1]: [31]
+    L [1]: [0] -> [31]
+    S [1]: [0]
+    L [1]: [0] -> [0]
+    S [1]: [1]
+    L [1]: [0] -> [1]
+    S [1]: [2]
+    L [1]: [0] -> [2]
+    S [1]: [3]
+    L [1]: [0] -> [3]
+    E [1]: [4]
+    L [1]: [0] -> [4]
+    S [1]: [5]
+    L [1]: [0] -> [5]
+    E [1]: [6]
+    L [1]: [0] -> [6]
+    E [1]: [7]
+    L [1]: [0] -> [7]
+    S [1]: [8]
+    L [1]: [0] -> [8]
+    S [1]: [9]
+    L [1]: [0] -> [9]
+    S [1]: [10]
+    L [1]: [0] -> [10]
+    E [1]: [11]
+    L [1]: [0] -> [11]
+    S [1]: [12]
+    L [1]: [0] -> [12]
+    S [1]: [13]
+    L [1]: [0] -> [13]
+    S [1]: [14]
+    L [1]: [0] -> [14]
+    S [1]: [15]
+    L [1]: [0] -> [15]
+    S [1]: [16]
+    L [1]: [0] -> [16]
+    S [1]: [17]
+    L [1]: [0] -> [17]
+    S [1]: [18]
+    L [1]: [0] -> [18]
+    S [1]: [19]
+    L [1]: [0] -> [19]
+    E [1]: [20]
+    L [1]: [0] -> [20]
+    E [1]: [21]
+    L [1]: [0] -> [21]
+    S [1]: [22]
+    L [1]: [0] -> [22]
+    S [1]: [23]
+    L [1]: [0] -> [23]
+    S [1]: [24]
+    L [1]: [0] -> [24]
+    S [1]: [25]
+    L [1]: [0] -> [25]
+    S [1]: [26]
+    L [1]: [0] -> [26]
+    S [1]: [27]
+    L [1]: [0] -> [27]
+    S [1]: [28]
+    L [1]: [0] -> [28]
+    S [1]: [29]
+    L [1]: [0] -> [29]
+    S [1]: [30]
+    L [1]: [0] -> [30]
+    S [1]: [31]
+    L [1]: [0] -> [31]
+    S [1]: [0]
+    L [1]: [0] -> [0]
+    S [1]: [1]
+    L [1]: [0] -> [1]
+    S [1]: [2]
+    L [1]: [0] -> [2]
+    S [1]: [3]
+    L [1]: [0] -> [3]
+    S [1]: [4]
+    L [1]: [0] -> [4]
+    S [1]: [5]
+    L [1]: [0] -> [5]
+    S [1]: [6]
+    L [1]: [0] -> [6]
+    S [1]: [7]
+    L [1]: [0] -> [7]
+    S [1]: [8]
+    L [1]: [0] -> [8]
+    S [1]: [9]
+    L [1]: [0] -> [9]
+    S [1]: [10]
+    L [1]: [0] -> [10]
+    S [1]: [11]
+    L [1]: [0] -> [11]
+    E [1]: [12]
+    L [1]: [0] -> [12]
+    S [1]: [13]
+    L [1]: [0] -> [13]
+    S [1]: [14]
+    L [1]: [0] -> [14]
+    System Call: [1] invoked Exit
+    Process [1] exited with status [7220]
+    No threads ready or runnable, and no pending interrupts.
+    Assuming the program completed.
+    Machine halting!
+
+    Ticks: total 633482, idle 0, system 1380, user 632102
+    Disk I/O: reads 0, writes 0
+    Console I/O: reads 0, writes 0
+    Paging: faults 0
+    Network I/O: packets received 0, sent 0
+
+    Cleaning up...
+
+-----------------------------------------------------------------------------
+
+Classes Modified - 
+
+In userprog/exception.cc:
+    Changes were made to void ExceptionHandler(ExceptionType which) in order to call a stub routine
+    when a PageFaultException is raised, as specified in Stage 3 of the instructions for the project
+    stages. The implementation for the Page Fault Handling is done here, following the set of instructions
+    given in the project description guidelines. Required outputs were added for the three conditions
+    as specified, for whenever a page is loaded into physical memory, whenever a page is evicted from
+    physical memory and written to swap area, and whenever a page is evicted from physical memory and
+    NOT written to the swap area.
+    
+In machine/translate.cc    
+    The pagetable structure was also modified in order to help keep track of pages that do not
+    exist in memory. 
+
+In addrspace.cc:
+    int TranslateDiskLocation(int virtAddr): works similarly to int TranslateDiskLocation(int virtAddr)
+    and was added in order to return the physical address using the swap file location in the pagetable 
+    as opposed to the physical page and offset.
+    
+    int ReadFileIntoBuffer(int virtAddr, OpenFile* file, int size, int fileAddr, char *into): 
+        This function was created in order to create an implementation of the 'even more' conservative 
+        method for writing the entire executable into the allocated space at startup, as specified
+        in Stage 4 of the project description. We made sure to handle the moving of pages between
+        backing store and memory during the page fault handling.        

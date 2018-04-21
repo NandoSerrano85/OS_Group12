@@ -126,11 +126,11 @@ AddrSpace::init(OpenFile* executable, Thread* parent, Thread *selfThread, bool r
 	pageTable[i].readOnly = FALSE;
 	pageTable[i].persisted = FALSE;
 	pageTable[i].location = i;
+    
+    pageTable[i].shared = FALSE;    //
     }
 
-
-
-    //CONSERVATIVE VERSION = Write entire executable into swap file!
+    //Entire executable is written into swap file -- Conservative approach
     OpenFile* swapFile = fileSystem->Open(swap);
     char buffer[size];
     int wrote;
